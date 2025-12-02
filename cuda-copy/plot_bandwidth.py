@@ -34,11 +34,17 @@ def parse_log_file(log_file):
     is_compare_mode = False
     
     # Check for compare mode
-    if 'Comparing all three kernels' in content or ('>>> Running baseline kernel...' in content and '>>> Running vectorize kernel...' in content):
+    # Updated to detect compare mode with vectorize_unroll
+    # Check for compare mode indicators: multiple kernel runs or compare message
+    if ('Comparing all kernels' in content or 'Comparing all three kernels' in content or 
+        ('>>> Running baseline kernel...' in content and '>>> Running vectorize kernel...' in content) or
+        ('>>> Running vectorize_unroll kernel...' in content)):
         is_compare_mode = True
         kernel_type = 'compare'
     elif 'Using kernel: loop_unroll' in content or 'Testing with loop_unroll_times' in content:
         kernel_type = 'loop_unroll'
+    elif 'Using kernel: vectorize_unroll' in content:
+        kernel_type = 'vectorize_unroll'
     elif 'Using kernel: vectorize' in content:
         kernel_type = 'vectorize'
     
@@ -111,6 +117,8 @@ def parse_log_file(log_file):
                     kernel_name = 'baseline'
                 elif kernel_type == 'vectorize':
                     kernel_name = 'vectorize'
+                elif kernel_type == 'vectorize_unroll':
+                    kernel_name = 'vectorize_unroll'
                 elif kernel_type == 'loop_unroll':
                     kernel_name = 'loop_unroll'
             
@@ -253,7 +261,7 @@ def plot_bandwidth(results, kernel_type='baseline', output_file='bandwidth_plot.
             if 'loop_unroll_times' in r:
                 grouped_results[r['loop_unroll_times']].append(r)
     else:
-        # Baseline or vectorize mode: group by block_size
+        # Baseline, vectorize, or vectorize_unroll mode: group by block_size
         for r in results:
             grouped_results[r['block_size']].append(r)
     
@@ -308,7 +316,7 @@ def plot_bandwidth(results, kernel_type='baseline', output_file='bandwidth_plot.
         ax.set_title('DRAM Bandwidth vs Data Size (Kernel Comparison)', fontsize=14, fontweight='bold')
     elif kernel_type == 'loop_unroll':
         ax.set_title('DRAM Bandwidth vs Data Size (by Loop Unroll Times)', fontsize=14, fontweight='bold')
-    elif kernel_type == 'vectorize':
+    elif kernel_type == 'vectorize' or kernel_type == 'vectorize_unroll':
         ax.set_title('DRAM Bandwidth vs Data Size (by Block Size)', fontsize=14, fontweight='bold')
     else:
         ax.set_title('DRAM Bandwidth vs Data Size (by Block Size)', fontsize=14, fontweight='bold')

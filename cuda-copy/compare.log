@@ -4,7 +4,7 @@ ncu is available, will collect DRAM metrics
 Running copy kernel with different sizes
 ==========================================
 
-Comparing all three kernels: baseline, loop_unroll (times=4), vectorize
+Comparing all kernels: baseline, loop_unroll (times=4), vectorize, vectorize_unroll
 Fixed parameters: block_dim=256, loop_unroll_times=4
 
 ========================================
@@ -19,24 +19,24 @@ Testing with 2^10 = 1024 elements
 Testing with block_dim = 256 threads per block
 Kernel: baseline
 ----------------------------------------
-Kernel execution time: 0.118784 ms
+Kernel execution time: 0.119808 ms
 Copy successful
 
 Collecting DRAM metrics with ncu...
 
 --- ncu Raw Measurement Results ---
-==PROF== Connected to process 6313 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Connected to process 8041 (/workspace/cuda-learning/cuda-copy/copy)
 ==PROF== Profiling "copy_baseline": 0%....50%....100% - 1 pass
-Kernel execution time: 667.201 ms
+Kernel execution time: 555.16 ms
 Copy successful
-==PROF== Disconnected from process 6313
-[6313] copy@127.0.0.1
+==PROF== Disconnected from process 8041
+[8041] copy@127.0.0.1
   copy_baseline(float *, float *, int) (4, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
     Section: Command line profiler metrics
     ---------------------- ----------- ------- ------- -------
     Metric Name            Metric Unit Minimum Maximum Average
     ---------------------- ----------- ------- ------- -------
-    dram__bytes_read.sum         Kbyte    7.17    7.17    7.17
+    dram__bytes_read.sum         Kbyte    7.04    7.04    7.04
     dram__bytes_write.sum         byte    0.00    0.00    0.00
     gpu__time_duration.sum          us    4.16    4.16    4.16
     ---------------------- ----------- ------- ------- -------
@@ -56,26 +56,26 @@ Testing with block_dim = 256 threads per block
 Testing with loop_unroll_times = 4
 Kernel: loop_unroll
 ----------------------------------------
-Kernel execution time: 0.120832 ms
+Kernel execution time: 0.116736 ms
 Copy successful
 
 Collecting DRAM metrics with ncu...
 
 --- ncu Raw Measurement Results ---
-==PROF== Connected to process 6338 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Connected to process 8066 (/workspace/cuda-learning/cuda-copy/copy)
 ==PROF== Profiling "copy_loop_unroll": 0%....50%....100% - 1 pass
-Kernel execution time: 638.567 ms
+Kernel execution time: 599.529 ms
 Copy successful
-==PROF== Disconnected from process 6338
-[6338] copy@127.0.0.1
+==PROF== Disconnected from process 8066
+[8066] copy@127.0.0.1
   copy_loop_unroll(float *, float *, int) (1, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
     Section: Command line profiler metrics
     ---------------------- ----------- ------- ------- -------
     Metric Name            Metric Unit Minimum Maximum Average
     ---------------------- ----------- ------- ------- -------
-    dram__bytes_read.sum         Kbyte    7.94    7.94    7.94
+    dram__bytes_read.sum         Kbyte    7.81    7.81    7.81
     dram__bytes_write.sum         byte    0.00    0.00    0.00
-    gpu__time_duration.sum          us    6.62    6.62    6.62
+    gpu__time_duration.sum          us    6.34    6.34    6.34
     ---------------------- ----------- ------- ------- -------
 
   Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
@@ -92,26 +92,62 @@ Testing with 2^10 = 1024 elements
 Testing with block_dim = 256 threads per block
 Kernel: vectorize
 ----------------------------------------
-Kernel execution time: 0.11776 ms
+Kernel execution time: 0.116736 ms
 Copy successful
 
 Collecting DRAM metrics with ncu...
 
 --- ncu Raw Measurement Results ---
-==PROF== Connected to process 6363 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Connected to process 8091 (/workspace/cuda-learning/cuda-copy/copy)
 ==PROF== Profiling "copy_vectorize": 0%....50%....100% - 1 pass
-Kernel execution time: 639.187 ms
+Kernel execution time: 567.876 ms
 Copy successful
-==PROF== Disconnected from process 6363
-[6363] copy@127.0.0.1
+==PROF== Disconnected from process 8091
+[8091] copy@127.0.0.1
   copy_vectorize(float *, float *, int) (1, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
     Section: Command line profiler metrics
     ---------------------- ----------- ------- ------- -------
     Metric Name            Metric Unit Minimum Maximum Average
     ---------------------- ----------- ------- ------- -------
-    dram__bytes_read.sum         Kbyte    7.17    7.17    7.17
+    dram__bytes_read.sum         Kbyte    7.04    7.04    7.04
     dram__bytes_write.sum         byte    0.00    0.00    0.00
     gpu__time_duration.sum          us    4.54    4.54    4.54
+    ---------------------- ----------- ------- ------- -------
+
+  Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
+  metrics for each individual kernel launch.                                                                         
+  If aggregating across varying launch configurations (like shared memory, cache config settings), the arithmetic    
+  mean can be misleading and looking at the individual results is recommended instead.                               
+
+
+>>> Running vectorize_unroll kernel...
+----------------------------------------
+Testing with 2^10 = 1024 elements
+----------------------------------------
+----------------------------------------
+Testing with block_dim = 256 threads per block
+Kernel: vectorize_unroll
+----------------------------------------
+Kernel execution time: 0.135168 ms
+Copy successful
+
+Collecting DRAM metrics with ncu...
+
+--- ncu Raw Measurement Results ---
+==PROF== Connected to process 8116 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Profiling "copy_vectorize_unroll": 0%....50%....100% - 1 pass
+Kernel execution time: 587.525 ms
+Copy successful
+==PROF== Disconnected from process 8116
+[8116] copy@127.0.0.1
+  copy_vectorize_unroll(float *, float *, int) (1, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
+    Section: Command line profiler metrics
+    ---------------------- ----------- ------- ------- -------
+    Metric Name            Metric Unit Minimum Maximum Average
+    ---------------------- ----------- ------- ------- -------
+    dram__bytes_read.sum         Kbyte    7.30    7.30    7.30
+    dram__bytes_write.sum         byte    0.00    0.00    0.00
+    gpu__time_duration.sum          us    4.61    4.61    4.61
     ---------------------- ----------- ------- ------- -------
 
   Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
@@ -134,19 +170,92 @@ Testing with 2^12 = 4096 elements
 Testing with block_dim = 256 threads per block
 Kernel: baseline
 ----------------------------------------
-Kernel execution time: 0.118784 ms
+Kernel execution time: 0.12288 ms
 Copy successful
 
 Collecting DRAM metrics with ncu...
 
 --- ncu Raw Measurement Results ---
-==PROF== Connected to process 6388 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Connected to process 8141 (/workspace/cuda-learning/cuda-copy/copy)
 ==PROF== Profiling "copy_baseline": 0%....50%....100% - 1 pass
-Kernel execution time: 639.207 ms
+Kernel execution time: 595.537 ms
 Copy successful
-==PROF== Disconnected from process 6388
-[6388] copy@127.0.0.1
+==PROF== Disconnected from process 8141
+[8141] copy@127.0.0.1
   copy_baseline(float *, float *, int) (16, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
+    Section: Command line profiler metrics
+    ---------------------- ----------- ------- ------- -------
+    Metric Name            Metric Unit Minimum Maximum Average
+    ---------------------- ----------- ------- ------- -------
+    dram__bytes_read.sum         Kbyte   19.46   19.46   19.46
+    dram__bytes_write.sum         byte    0.00    0.00    0.00
+    gpu__time_duration.sum          us    4.32    4.32    4.32
+    ---------------------- ----------- ------- ------- -------
+
+  Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
+  metrics for each individual kernel launch.                                                                         
+  If aggregating across varying launch configurations (like shared memory, cache config settings), the arithmetic    
+  mean can be misleading and looking at the individual results is recommended instead.                               
+
+
+>>> Running loop_unroll kernel (times=4)...
+----------------------------------------
+Testing with 2^12 = 4096 elements
+----------------------------------------
+----------------------------------------
+Testing with block_dim = 256 threads per block
+Testing with loop_unroll_times = 4
+Kernel: loop_unroll
+----------------------------------------
+Kernel execution time: 0.124928 ms
+Copy successful
+
+Collecting DRAM metrics with ncu...
+
+--- ncu Raw Measurement Results ---
+==PROF== Connected to process 8166 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Profiling "copy_loop_unroll": 0%....50%....100% - 1 pass
+Kernel execution time: 671.11 ms
+Copy successful
+==PROF== Disconnected from process 8166
+[8166] copy@127.0.0.1
+  copy_loop_unroll(float *, float *, int) (4, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
+    Section: Command line profiler metrics
+    ---------------------- ----------- ------- ------- -------
+    Metric Name            Metric Unit Minimum Maximum Average
+    ---------------------- ----------- ------- ------- -------
+    dram__bytes_read.sum         Kbyte   20.22   20.22   20.22
+    dram__bytes_write.sum         byte    0.00    0.00    0.00
+    gpu__time_duration.sum          us    5.66    5.66    5.66
+    ---------------------- ----------- ------- ------- -------
+
+  Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
+  metrics for each individual kernel launch.                                                                         
+  If aggregating across varying launch configurations (like shared memory, cache config settings), the arithmetic    
+  mean can be misleading and looking at the individual results is recommended instead.                               
+
+
+>>> Running vectorize kernel...
+----------------------------------------
+Testing with 2^12 = 4096 elements
+----------------------------------------
+----------------------------------------
+Testing with block_dim = 256 threads per block
+Kernel: vectorize
+----------------------------------------
+Kernel execution time: 0.144384 ms
+Copy successful
+
+Collecting DRAM metrics with ncu...
+
+--- ncu Raw Measurement Results ---
+==PROF== Connected to process 8191 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Profiling "copy_vectorize": 0%....50%....100% - 1 pass
+Kernel execution time: 595.401 ms
+Copy successful
+==PROF== Disconnected from process 8191
+[8191] copy@127.0.0.1
+  copy_vectorize(float *, float *, int) (4, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
     Section: Command line profiler metrics
     ---------------------- ----------- ------- ------- -------
     Metric Name            Metric Unit Minimum Maximum Average
@@ -162,71 +271,34 @@ Copy successful
   mean can be misleading and looking at the individual results is recommended instead.                               
 
 
->>> Running loop_unroll kernel (times=4)...
+>>> Running vectorize_unroll kernel...
 ----------------------------------------
 Testing with 2^12 = 4096 elements
 ----------------------------------------
 ----------------------------------------
 Testing with block_dim = 256 threads per block
-Testing with loop_unroll_times = 4
-Kernel: loop_unroll
+Kernel: vectorize_unroll
 ----------------------------------------
-Kernel execution time: 0.110592 ms
+Kernel execution time: 0.114688 ms
 Copy successful
 
 Collecting DRAM metrics with ncu...
 
 --- ncu Raw Measurement Results ---
-==PROF== Connected to process 6413 (/workspace/cuda-learning/cuda-copy/copy)
-==PROF== Profiling "copy_loop_unroll": 0%....50%....100% - 1 pass
-Kernel execution time: 647.245 ms
+==PROF== Connected to process 8216 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Profiling "copy_vectorize_unroll": 0%....50%....100% - 1 pass
+Kernel execution time: 567.116 ms
 Copy successful
-==PROF== Disconnected from process 6413
-[6413] copy@127.0.0.1
-  copy_loop_unroll(float *, float *, int) (4, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
+==PROF== Disconnected from process 8216
+[8216] copy@127.0.0.1
+  copy_vectorize_unroll(float *, float *, int) (1, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
     Section: Command line profiler metrics
     ---------------------- ----------- ------- ------- -------
     Metric Name            Metric Unit Minimum Maximum Average
     ---------------------- ----------- ------- ------- -------
-    dram__bytes_read.sum         Kbyte   20.10   20.10   20.10
+    dram__bytes_read.sum         Kbyte   19.58   19.58   19.58
     dram__bytes_write.sum         byte    0.00    0.00    0.00
-    gpu__time_duration.sum          us    5.70    5.70    5.70
-    ---------------------- ----------- ------- ------- -------
-
-  Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
-  metrics for each individual kernel launch.                                                                         
-  If aggregating across varying launch configurations (like shared memory, cache config settings), the arithmetic    
-  mean can be misleading and looking at the individual results is recommended instead.                               
-
-
->>> Running vectorize kernel...
-----------------------------------------
-Testing with 2^12 = 4096 elements
-----------------------------------------
-----------------------------------------
-Testing with block_dim = 256 threads per block
-Kernel: vectorize
-----------------------------------------
-Kernel execution time: 0.116736 ms
-Copy successful
-
-Collecting DRAM metrics with ncu...
-
---- ncu Raw Measurement Results ---
-==PROF== Connected to process 6438 (/workspace/cuda-learning/cuda-copy/copy)
-==PROF== Profiling "copy_vectorize": 0%....50%....100% - 1 pass
-Kernel execution time: 639.131 ms
-Copy successful
-==PROF== Disconnected from process 6438
-[6438] copy@127.0.0.1
-  copy_vectorize(float *, float *, int) (4, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
-    Section: Command line profiler metrics
-    ---------------------- ----------- ------- ------- -------
-    Metric Name            Metric Unit Minimum Maximum Average
-    ---------------------- ----------- ------- ------- -------
-    dram__bytes_read.sum         Kbyte   19.33   19.33   19.33
-    dram__bytes_write.sum         byte    0.00    0.00    0.00
-    gpu__time_duration.sum          us    4.42    4.42    4.42
+    gpu__time_duration.sum          us    6.43    6.43    6.43
     ---------------------- ----------- ------- ------- -------
 
   Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
@@ -249,97 +321,24 @@ Testing with 2^14 = 16384 elements
 Testing with block_dim = 256 threads per block
 Kernel: baseline
 ----------------------------------------
-Kernel execution time: 0.111616 ms
+Kernel execution time: 0.118784 ms
 Copy successful
 
 Collecting DRAM metrics with ncu...
 
 --- ncu Raw Measurement Results ---
-==PROF== Connected to process 6463 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Connected to process 8241 (/workspace/cuda-learning/cuda-copy/copy)
 ==PROF== Profiling "copy_baseline": 0%....50%....100% - 1 pass
-Kernel execution time: 621.55 ms
+Kernel execution time: 605.789 ms
 Copy successful
-==PROF== Disconnected from process 6463
-[6463] copy@127.0.0.1
+==PROF== Disconnected from process 8241
+[8241] copy@127.0.0.1
   copy_baseline(float *, float *, int) (64, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
     Section: Command line profiler metrics
     ---------------------- ----------- ------- ------- -------
     Metric Name            Metric Unit Minimum Maximum Average
     ---------------------- ----------- ------- ------- -------
     dram__bytes_read.sum         Kbyte   68.48   68.48   68.48
-    dram__bytes_write.sum         byte    0.00    0.00    0.00
-    gpu__time_duration.sum          us    4.22    4.22    4.22
-    ---------------------- ----------- ------- ------- -------
-
-  Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
-  metrics for each individual kernel launch.                                                                         
-  If aggregating across varying launch configurations (like shared memory, cache config settings), the arithmetic    
-  mean can be misleading and looking at the individual results is recommended instead.                               
-
-
->>> Running loop_unroll kernel (times=4)...
-----------------------------------------
-Testing with 2^14 = 16384 elements
-----------------------------------------
-----------------------------------------
-Testing with block_dim = 256 threads per block
-Testing with loop_unroll_times = 4
-Kernel: loop_unroll
-----------------------------------------
-Kernel execution time: 0.11264 ms
-Copy successful
-
-Collecting DRAM metrics with ncu...
-
---- ncu Raw Measurement Results ---
-==PROF== Connected to process 6488 (/workspace/cuda-learning/cuda-copy/copy)
-==PROF== Profiling "copy_loop_unroll": 0%....50%....100% - 1 pass
-Kernel execution time: 683.659 ms
-Copy successful
-==PROF== Disconnected from process 6488
-[6488] copy@127.0.0.1
-  copy_loop_unroll(float *, float *, int) (16, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
-    Section: Command line profiler metrics
-    ---------------------- ----------- ------- ------- -------
-    Metric Name            Metric Unit Minimum Maximum Average
-    ---------------------- ----------- ------- ------- -------
-    dram__bytes_read.sum         Kbyte   69.25   69.25   69.25
-    dram__bytes_write.sum         byte    0.00    0.00    0.00
-    gpu__time_duration.sum          us    6.27    6.27    6.27
-    ---------------------- ----------- ------- ------- -------
-
-  Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
-  metrics for each individual kernel launch.                                                                         
-  If aggregating across varying launch configurations (like shared memory, cache config settings), the arithmetic    
-  mean can be misleading and looking at the individual results is recommended instead.                               
-
-
->>> Running vectorize kernel...
-----------------------------------------
-Testing with 2^14 = 16384 elements
-----------------------------------------
-----------------------------------------
-Testing with block_dim = 256 threads per block
-Kernel: vectorize
-----------------------------------------
-Kernel execution time: 0.11776 ms
-Copy successful
-
-Collecting DRAM metrics with ncu...
-
---- ncu Raw Measurement Results ---
-==PROF== Connected to process 6513 (/workspace/cuda-learning/cuda-copy/copy)
-==PROF== Profiling "copy_vectorize": 0%....50%....100% - 1 pass
-Kernel execution time: 639.244 ms
-Copy successful
-==PROF== Disconnected from process 6513
-[6513] copy@127.0.0.1
-  copy_vectorize(float *, float *, int) (16, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
-    Section: Command line profiler metrics
-    ---------------------- ----------- ------- ------- -------
-    Metric Name            Metric Unit Minimum Maximum Average
-    ---------------------- ----------- ------- ------- -------
-    dram__bytes_read.sum         Kbyte   68.61   68.61   68.61
     dram__bytes_write.sum         byte    0.00    0.00    0.00
     gpu__time_duration.sum          us    4.32    4.32    4.32
     ---------------------- ----------- ------- ------- -------
@@ -350,6 +349,115 @@ Copy successful
   mean can be misleading and looking at the individual results is recommended instead.                               
 
 
+>>> Running loop_unroll kernel (times=4)...
+----------------------------------------
+Testing with 2^14 = 16384 elements
+----------------------------------------
+----------------------------------------
+Testing with block_dim = 256 threads per block
+Testing with loop_unroll_times = 4
+Kernel: loop_unroll
+----------------------------------------
+Kernel execution time: 0.120832 ms
+Copy successful
+
+Collecting DRAM metrics with ncu...
+
+--- ncu Raw Measurement Results ---
+==PROF== Connected to process 8266 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Profiling "copy_loop_unroll": 0%....50%....100% - 1 pass
+Kernel execution time: 591.43 ms
+Copy successful
+==PROF== Disconnected from process 8266
+[8266] copy@127.0.0.1
+  copy_loop_unroll(float *, float *, int) (16, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
+    Section: Command line profiler metrics
+    ---------------------- ----------- ------- ------- -------
+    Metric Name            Metric Unit Minimum Maximum Average
+    ---------------------- ----------- ------- ------- -------
+    dram__bytes_read.sum         Kbyte   69.25   69.25   69.25
+    dram__bytes_write.sum         byte    0.00    0.00    0.00
+    gpu__time_duration.sum          us    6.14    6.14    6.14
+    ---------------------- ----------- ------- ------- -------
+
+  Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
+  metrics for each individual kernel launch.                                                                         
+  If aggregating across varying launch configurations (like shared memory, cache config settings), the arithmetic    
+  mean can be misleading and looking at the individual results is recommended instead.                               
+
+
+>>> Running vectorize kernel...
+----------------------------------------
+Testing with 2^14 = 16384 elements
+----------------------------------------
+----------------------------------------
+Testing with block_dim = 256 threads per block
+Kernel: vectorize
+----------------------------------------
+Kernel execution time: 0.119808 ms
+Copy successful
+
+Collecting DRAM metrics with ncu...
+
+--- ncu Raw Measurement Results ---
+==PROF== Connected to process 8291 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Profiling "copy_vectorize": 0%....50%....100% - 1 pass
+Kernel execution time: 558.228 ms
+Copy successful
+==PROF== Disconnected from process 8291
+[8291] copy@127.0.0.1
+  copy_vectorize(float *, float *, int) (16, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
+    Section: Command line profiler metrics
+    ---------------------- ----------- ------- ------- -------
+    Metric Name            Metric Unit Minimum Maximum Average
+    ---------------------- ----------- ------- ------- -------
+    dram__bytes_read.sum         Kbyte   68.48   68.48   68.48
+    dram__bytes_write.sum         byte    0.00    0.00    0.00
+    gpu__time_duration.sum          us    4.38    4.38    4.38
+    ---------------------- ----------- ------- ------- -------
+
+  Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
+  metrics for each individual kernel launch.                                                                         
+  If aggregating across varying launch configurations (like shared memory, cache config settings), the arithmetic    
+  mean can be misleading and looking at the individual results is recommended instead.                               
+
+
+>>> Running vectorize_unroll kernel...
+----------------------------------------
+Testing with 2^14 = 16384 elements
+----------------------------------------
+----------------------------------------
+Testing with block_dim = 256 threads per block
+Kernel: vectorize_unroll
+----------------------------------------
+Kernel execution time: 0.141312 ms
+Copy successful
+
+Collecting DRAM metrics with ncu...
+
+--- ncu Raw Measurement Results ---
+==PROF== Connected to process 8316 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Profiling "copy_vectorize_unroll": 0%....50%....100% - 1 pass
+Kernel execution time: 575.446 ms
+Copy successful
+==PROF== Disconnected from process 8316
+[8316] copy@127.0.0.1
+  copy_vectorize_unroll(float *, float *, int) (2, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
+    Section: Command line profiler metrics
+    ---------------------- ----------- ------- ------- -------
+    Metric Name            Metric Unit Minimum Maximum Average
+    ---------------------- ----------- ------- ------- -------
+    dram__bytes_read.sum         Kbyte   68.74   68.74   68.74
+    dram__bytes_write.sum         byte    0.00    0.00    0.00
+    gpu__time_duration.sum          us    9.06    9.06    9.06
+    ---------------------- ----------- ------- ------- -------
+
+  Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
+  metrics for each individual kernel launch.                                                                         
+  If aggregating across varying launch configurations (like shared memory, cache config settings), the arithmetic    
+  mean can be misleading and looking at the individual results is recommended instead.                               
+
+
 ========================================
 
 ========================================
@@ -364,26 +472,26 @@ Testing with 2^16 = 65536 elements
 Testing with block_dim = 256 threads per block
 Kernel: baseline
 ----------------------------------------
-Kernel execution time: 0.1088 ms
+Kernel execution time: 0.114624 ms
 Copy successful
 
 Collecting DRAM metrics with ncu...
 
 --- ncu Raw Measurement Results ---
-==PROF== Connected to process 6538 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Connected to process 8341 (/workspace/cuda-learning/cuda-copy/copy)
 ==PROF== Profiling "copy_baseline": 0%....50%....100% - 1 pass
-Kernel execution time: 599.095 ms
+Kernel execution time: 599.333 ms
 Copy successful
-==PROF== Disconnected from process 6538
-[6538] copy@127.0.0.1
+==PROF== Disconnected from process 8341
+[8341] copy@127.0.0.1
   copy_baseline(float *, float *, int) (256, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
     Section: Command line profiler metrics
     ---------------------- ----------- ------- ------- -------
     Metric Name            Metric Unit Minimum Maximum Average
     ---------------------- ----------- ------- ------- -------
-    dram__bytes_read.sum         Kbyte  265.22  265.22  265.22
+    dram__bytes_read.sum         Kbyte  265.09  265.09  265.09
     dram__bytes_write.sum         byte    0.00    0.00    0.00
-    gpu__time_duration.sum          us    4.48    4.48    4.48
+    gpu__time_duration.sum          us    4.38    4.38    4.38
     ---------------------- ----------- ------- ------- -------
 
   Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
@@ -401,26 +509,26 @@ Testing with block_dim = 256 threads per block
 Testing with loop_unroll_times = 4
 Kernel: loop_unroll
 ----------------------------------------
-Kernel execution time: 0.109088 ms
+Kernel execution time: 0.120608 ms
 Copy successful
 
 Collecting DRAM metrics with ncu...
 
 --- ncu Raw Measurement Results ---
-==PROF== Connected to process 6563 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Connected to process 8366 (/workspace/cuda-learning/cuda-copy/copy)
 ==PROF== Profiling "copy_loop_unroll": 0%....50%....100% - 1 pass
-Kernel execution time: 639.625 ms
+Kernel execution time: 595.331 ms
 Copy successful
-==PROF== Disconnected from process 6563
-[6563] copy@127.0.0.1
+==PROF== Disconnected from process 8366
+[8366] copy@127.0.0.1
   copy_loop_unroll(float *, float *, int) (64, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
     Section: Command line profiler metrics
     ---------------------- ----------- ------- ------- -------
     Metric Name            Metric Unit Minimum Maximum Average
     ---------------------- ----------- ------- ------- -------
-    dram__bytes_read.sum         Kbyte  265.98  265.98  265.98
+    dram__bytes_read.sum         Kbyte  265.86  265.86  265.86
     dram__bytes_write.sum         byte    0.00    0.00    0.00
-    gpu__time_duration.sum          us    5.98    5.98    5.98
+    gpu__time_duration.sum          us    6.05    6.05    6.05
     ---------------------- ----------- ------- ------- -------
 
   Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
@@ -437,26 +545,62 @@ Testing with 2^16 = 65536 elements
 Testing with block_dim = 256 threads per block
 Kernel: vectorize
 ----------------------------------------
-Kernel execution time: 0.108736 ms
+Kernel execution time: 0.107104 ms
 Copy successful
 
 Collecting DRAM metrics with ncu...
 
 --- ncu Raw Measurement Results ---
-==PROF== Connected to process 6588 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Connected to process 8391 (/workspace/cuda-learning/cuda-copy/copy)
 ==PROF== Profiling "copy_vectorize": 0%....50%....100% - 1 pass
-Kernel execution time: 643.145 ms
+Kernel execution time: 557.942 ms
 Copy successful
-==PROF== Disconnected from process 6588
-[6588] copy@127.0.0.1
+==PROF== Disconnected from process 8391
+[8391] copy@127.0.0.1
   copy_vectorize(float *, float *, int) (64, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
     Section: Command line profiler metrics
     ---------------------- ----------- ------- ------- -------
     Metric Name            Metric Unit Minimum Maximum Average
     ---------------------- ----------- ------- ------- -------
-    dram__bytes_read.sum         Kbyte  265.09  265.09  265.09
+    dram__bytes_read.sum         Kbyte  265.22  265.22  265.22
     dram__bytes_write.sum         byte    0.00    0.00    0.00
-    gpu__time_duration.sum          us    4.45    4.45    4.45
+    gpu__time_duration.sum          us    4.32    4.32    4.32
+    ---------------------- ----------- ------- ------- -------
+
+  Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
+  metrics for each individual kernel launch.                                                                         
+  If aggregating across varying launch configurations (like shared memory, cache config settings), the arithmetic    
+  mean can be misleading and looking at the individual results is recommended instead.                               
+
+
+>>> Running vectorize_unroll kernel...
+----------------------------------------
+Testing with 2^16 = 65536 elements
+----------------------------------------
+----------------------------------------
+Testing with block_dim = 256 threads per block
+Kernel: vectorize_unroll
+----------------------------------------
+Kernel execution time: 0.114144 ms
+Copy successful
+
+Collecting DRAM metrics with ncu...
+
+--- ncu Raw Measurement Results ---
+==PROF== Connected to process 8416 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Profiling "copy_vectorize_unroll": 0%....50%....100% - 1 pass
+Kernel execution time: 607.494 ms
+Copy successful
+==PROF== Disconnected from process 8416
+[8416] copy@127.0.0.1
+  copy_vectorize_unroll(float *, float *, int) (8, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
+    Section: Command line profiler metrics
+    ---------------------- ----------- ------- ------- -------
+    Metric Name            Metric Unit Minimum Maximum Average
+    ---------------------- ----------- ------- ------- -------
+    dram__bytes_read.sum         Kbyte  265.34  265.34  265.34
+    dram__bytes_write.sum         byte    0.00    0.00    0.00
+    gpu__time_duration.sum          us    8.70    8.70    8.70
     ---------------------- ----------- ------- ------- -------
 
   Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
@@ -479,18 +623,18 @@ Testing with 2^18 = 262144 elements
 Testing with block_dim = 256 threads per block
 Kernel: baseline
 ----------------------------------------
-Kernel execution time: 0.06992 ms
+Kernel execution time: 0.06 ms
 Copy successful
 
 Collecting DRAM metrics with ncu...
 
 --- ncu Raw Measurement Results ---
-==PROF== Connected to process 6613 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Connected to process 8441 (/workspace/cuda-learning/cuda-copy/copy)
 ==PROF== Profiling "copy_baseline": 0%....50%....100% - 1 pass
-Kernel execution time: 610.892 ms
+Kernel execution time: 622.972 ms
 Copy successful
-==PROF== Disconnected from process 6613
-[6613] copy@127.0.0.1
+==PROF== Disconnected from process 8441
+[8441] copy@127.0.0.1
   copy_baseline(float *, float *, int) (1024, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
     Section: Command line profiler metrics
     ---------------------- ----------- ------- ------- -------
@@ -498,7 +642,7 @@ Copy successful
     ---------------------- ----------- ------- ------- -------
     dram__bytes_read.sum         Mbyte    1.05    1.05    1.05
     dram__bytes_write.sum         byte    0.00    0.00    0.00
-    gpu__time_duration.sum          us    5.76    5.76    5.76
+    gpu__time_duration.sum          us    5.63    5.63    5.63
     ---------------------- ----------- ------- ------- -------
 
   Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
@@ -516,18 +660,18 @@ Testing with block_dim = 256 threads per block
 Testing with loop_unroll_times = 4
 Kernel: loop_unroll
 ----------------------------------------
-Kernel execution time: 0.046688 ms
+Kernel execution time: 0.049536 ms
 Copy successful
 
 Collecting DRAM metrics with ncu...
 
 --- ncu Raw Measurement Results ---
-==PROF== Connected to process 6638 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Connected to process 8466 (/workspace/cuda-learning/cuda-copy/copy)
 ==PROF== Profiling "copy_loop_unroll": 0%....50%....100% - 1 pass
-Kernel execution time: 592.993 ms
+Kernel execution time: 571.068 ms
 Copy successful
-==PROF== Disconnected from process 6638
-[6638] copy@127.0.0.1
+==PROF== Disconnected from process 8466
+[8466] copy@127.0.0.1
   copy_loop_unroll(float *, float *, int) (256, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
     Section: Command line profiler metrics
     ---------------------- ----------- ------- ------- -------
@@ -535,7 +679,7 @@ Copy successful
     ---------------------- ----------- ------- ------- -------
     dram__bytes_read.sum         Mbyte    1.05    1.05    1.05
     dram__bytes_write.sum         byte    0.00    0.00    0.00
-    gpu__time_duration.sum          us    6.82    6.82    6.82
+    gpu__time_duration.sum          us    6.85    6.85    6.85
     ---------------------- ----------- ------- ------- -------
 
   Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
@@ -552,18 +696,18 @@ Testing with 2^18 = 262144 elements
 Testing with block_dim = 256 threads per block
 Kernel: vectorize
 ----------------------------------------
-Kernel execution time: 0.052352 ms
+Kernel execution time: 0.062208 ms
 Copy successful
 
 Collecting DRAM metrics with ncu...
 
 --- ncu Raw Measurement Results ---
-==PROF== Connected to process 6663 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Connected to process 8491 (/workspace/cuda-learning/cuda-copy/copy)
 ==PROF== Profiling "copy_vectorize": 0%....50%....100% - 1 pass
-Kernel execution time: 611.346 ms
+Kernel execution time: 602.351 ms
 Copy successful
-==PROF== Disconnected from process 6663
-[6663] copy@127.0.0.1
+==PROF== Disconnected from process 8491
+[8491] copy@127.0.0.1
   copy_vectorize(float *, float *, int) (256, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
     Section: Command line profiler metrics
     ---------------------- ----------- ------- ------- -------
@@ -571,7 +715,43 @@ Copy successful
     ---------------------- ----------- ------- ------- -------
     dram__bytes_read.sum         Mbyte    1.05    1.05    1.05
     dram__bytes_write.sum         byte    0.00    0.00    0.00
-    gpu__time_duration.sum          us    5.31    5.31    5.31
+    gpu__time_duration.sum          us    5.18    5.18    5.18
+    ---------------------- ----------- ------- ------- -------
+
+  Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
+  metrics for each individual kernel launch.                                                                         
+  If aggregating across varying launch configurations (like shared memory, cache config settings), the arithmetic    
+  mean can be misleading and looking at the individual results is recommended instead.                               
+
+
+>>> Running vectorize_unroll kernel...
+----------------------------------------
+Testing with 2^18 = 262144 elements
+----------------------------------------
+----------------------------------------
+Testing with block_dim = 256 threads per block
+Kernel: vectorize_unroll
+----------------------------------------
+Kernel execution time: 0.066368 ms
+Copy successful
+
+Collecting DRAM metrics with ncu...
+
+--- ncu Raw Measurement Results ---
+==PROF== Connected to process 8516 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Profiling "copy_vectorize_unroll": 0%....50%....100% - 1 pass
+Kernel execution time: 619.054 ms
+Copy successful
+==PROF== Disconnected from process 8516
+[8516] copy@127.0.0.1
+  copy_vectorize_unroll(float *, float *, int) (32, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
+    Section: Command line profiler metrics
+    ---------------------- ----------- ------- ------- -------
+    Metric Name            Metric Unit Minimum Maximum Average
+    ---------------------- ----------- ------- ------- -------
+    dram__bytes_read.sum         Mbyte    1.05    1.05    1.05
+    dram__bytes_write.sum         byte    0.00    0.00    0.00
+    gpu__time_duration.sum          us    9.25    9.25    9.25
     ---------------------- ----------- ------- ------- -------
 
   Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
@@ -593,194 +773,6 @@ Testing with 2^20 = 1048576 elements
 ----------------------------------------
 Testing with block_dim = 256 threads per block
 Kernel: baseline
-----------------------------------------
-Kernel execution time: 0.049824 ms
-Copy successful
-
-Collecting DRAM metrics with ncu...
-
---- ncu Raw Measurement Results ---
-==PROF== Connected to process 6688 (/workspace/cuda-learning/cuda-copy/copy)
-==PROF== Profiling "copy_baseline": 0%....50%....100% - 1 pass
-Kernel execution time: 642.143 ms
-Copy successful
-==PROF== Disconnected from process 6688
-[6688] copy@127.0.0.1
-  copy_baseline(float *, float *, int) (4096, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
-    Section: Command line profiler metrics
-    ---------------------- ----------- ------- ------- -------
-    Metric Name            Metric Unit Minimum Maximum Average
-    ---------------------- ----------- ------- ------- -------
-    dram__bytes_read.sum         Mbyte    4.20    4.20    4.20
-    dram__bytes_write.sum         byte    0.00    0.00    0.00
-    gpu__time_duration.sum          us    9.50    9.50    9.50
-    ---------------------- ----------- ------- ------- -------
-
-  Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
-  metrics for each individual kernel launch.                                                                         
-  If aggregating across varying launch configurations (like shared memory, cache config settings), the arithmetic    
-  mean can be misleading and looking at the individual results is recommended instead.                               
-
-
->>> Running loop_unroll kernel (times=4)...
-----------------------------------------
-Testing with 2^20 = 1048576 elements
-----------------------------------------
-----------------------------------------
-Testing with block_dim = 256 threads per block
-Testing with loop_unroll_times = 4
-Kernel: loop_unroll
-----------------------------------------
-Kernel execution time: 0.059424 ms
-Copy successful
-
-Collecting DRAM metrics with ncu...
-
---- ncu Raw Measurement Results ---
-==PROF== Connected to process 6713 (/workspace/cuda-learning/cuda-copy/copy)
-==PROF== Profiling "copy_loop_unroll": 0%....50%....100% - 1 pass
-Kernel execution time: 610.284 ms
-Copy successful
-==PROF== Disconnected from process 6713
-[6713] copy@127.0.0.1
-  copy_loop_unroll(float *, float *, int) (1024, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
-    Section: Command line profiler metrics
-    ---------------------- ----------- ------- ------- -------
-    Metric Name            Metric Unit Minimum Maximum Average
-    ---------------------- ----------- ------- ------- -------
-    dram__bytes_read.sum         Mbyte    4.20    4.20    4.20
-    dram__bytes_write.sum         byte    0.00    0.00    0.00
-    gpu__time_duration.sum          us   10.50   10.50   10.50
-    ---------------------- ----------- ------- ------- -------
-
-  Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
-  metrics for each individual kernel launch.                                                                         
-  If aggregating across varying launch configurations (like shared memory, cache config settings), the arithmetic    
-  mean can be misleading and looking at the individual results is recommended instead.                               
-
-
->>> Running vectorize kernel...
-----------------------------------------
-Testing with 2^20 = 1048576 elements
-----------------------------------------
-----------------------------------------
-Testing with block_dim = 256 threads per block
-Kernel: vectorize
-----------------------------------------
-Kernel execution time: 0.048992 ms
-Copy successful
-
-Collecting DRAM metrics with ncu...
-
---- ncu Raw Measurement Results ---
-==PROF== Connected to process 6738 (/workspace/cuda-learning/cuda-copy/copy)
-==PROF== Profiling "copy_vectorize": 0%....50%....100% - 1 pass
-Kernel execution time: 625.889 ms
-Copy successful
-==PROF== Disconnected from process 6738
-[6738] copy@127.0.0.1
-  copy_vectorize(float *, float *, int) (1024, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
-    Section: Command line profiler metrics
-    ---------------------- ----------- ------- ------- -------
-    Metric Name            Metric Unit Minimum Maximum Average
-    ---------------------- ----------- ------- ------- -------
-    dram__bytes_read.sum         Mbyte    4.20    4.20    4.20
-    dram__bytes_write.sum         byte    0.00    0.00    0.00
-    gpu__time_duration.sum          us    8.29    8.29    8.29
-    ---------------------- ----------- ------- ------- -------
-
-  Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
-  metrics for each individual kernel launch.                                                                         
-  If aggregating across varying launch configurations (like shared memory, cache config settings), the arithmetic    
-  mean can be misleading and looking at the individual results is recommended instead.                               
-
-
-========================================
-
-========================================
-Testing with 2^22 = 4194304 elements
-========================================
-
->>> Running baseline kernel...
-----------------------------------------
-Testing with 2^22 = 4194304 elements
-----------------------------------------
-----------------------------------------
-Testing with block_dim = 256 threads per block
-Kernel: baseline
-----------------------------------------
-Kernel execution time: 0.0704 ms
-Copy successful
-
-Collecting DRAM metrics with ncu...
-
---- ncu Raw Measurement Results ---
-==PROF== Connected to process 6763 (/workspace/cuda-learning/cuda-copy/copy)
-==PROF== Profiling "copy_baseline": 0%....50%....100% - 1 pass
-Kernel execution time: 625.841 ms
-Copy successful
-==PROF== Disconnected from process 6763
-[6763] copy@127.0.0.1
-  copy_baseline(float *, float *, int) (16384, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
-    Section: Command line profiler metrics
-    ---------------------- ----------- ------- ------- -------
-    Metric Name            Metric Unit Minimum Maximum Average
-    ---------------------- ----------- ------- ------- -------
-    dram__bytes_read.sum         Mbyte   16.78   16.78   16.78
-    dram__bytes_write.sum        Mbyte    4.16    4.16    4.16
-    gpu__time_duration.sum          us   25.34   25.34   25.34
-    ---------------------- ----------- ------- ------- -------
-
-  Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
-  metrics for each individual kernel launch.                                                                         
-  If aggregating across varying launch configurations (like shared memory, cache config settings), the arithmetic    
-  mean can be misleading and looking at the individual results is recommended instead.                               
-
-
->>> Running loop_unroll kernel (times=4)...
-----------------------------------------
-Testing with 2^22 = 4194304 elements
-----------------------------------------
-----------------------------------------
-Testing with block_dim = 256 threads per block
-Testing with loop_unroll_times = 4
-Kernel: loop_unroll
-----------------------------------------
-Kernel execution time: 0.082048 ms
-Copy successful
-
-Collecting DRAM metrics with ncu...
-
---- ncu Raw Measurement Results ---
-==PROF== Connected to process 6788 (/workspace/cuda-learning/cuda-copy/copy)
-==PROF== Profiling "copy_loop_unroll": 0%....50%....100% - 1 pass
-Kernel execution time: 605.244 ms
-Copy successful
-==PROF== Disconnected from process 6788
-[6788] copy@127.0.0.1
-  copy_loop_unroll(float *, float *, int) (4096, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
-    Section: Command line profiler metrics
-    ---------------------- ----------- ------- ------- -------
-    Metric Name            Metric Unit Minimum Maximum Average
-    ---------------------- ----------- ------- ------- -------
-    dram__bytes_read.sum         Mbyte   16.78   16.78   16.78
-    dram__bytes_write.sum        Mbyte    4.32    4.32    4.32
-    gpu__time_duration.sum          us   24.42   24.42   24.42
-    ---------------------- ----------- ------- ------- -------
-
-  Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
-  metrics for each individual kernel launch.                                                                         
-  If aggregating across varying launch configurations (like shared memory, cache config settings), the arithmetic    
-  mean can be misleading and looking at the individual results is recommended instead.                               
-
-
->>> Running vectorize kernel...
-----------------------------------------
-Testing with 2^22 = 4194304 elements
-----------------------------------------
-----------------------------------------
-Testing with block_dim = 256 threads per block
-Kernel: vectorize
 ----------------------------------------
 Kernel execution time: 0.060032 ms
 Copy successful
@@ -788,20 +780,280 @@ Copy successful
 Collecting DRAM metrics with ncu...
 
 --- ncu Raw Measurement Results ---
-==PROF== Connected to process 6813 (/workspace/cuda-learning/cuda-copy/copy)
-==PROF== Profiling "copy_vectorize": 0%....50%....100% - 1 pass
-Kernel execution time: 636.231 ms
+==PROF== Connected to process 8541 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Profiling "copy_baseline": 0%....50%....100% - 1 pass
+Kernel execution time: 602.044 ms
 Copy successful
-==PROF== Disconnected from process 6813
-[6813] copy@127.0.0.1
+==PROF== Disconnected from process 8541
+[8541] copy@127.0.0.1
+  copy_baseline(float *, float *, int) (4096, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
+    Section: Command line profiler metrics
+    ---------------------- ----------- ------- ------- -------
+    Metric Name            Metric Unit Minimum Maximum Average
+    ---------------------- ----------- ------- ------- -------
+    dram__bytes_read.sum         Mbyte    4.20    4.20    4.20
+    dram__bytes_write.sum         byte  128.00  128.00  128.00
+    gpu__time_duration.sum          us    9.47    9.47    9.47
+    ---------------------- ----------- ------- ------- -------
+
+  Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
+  metrics for each individual kernel launch.                                                                         
+  If aggregating across varying launch configurations (like shared memory, cache config settings), the arithmetic    
+  mean can be misleading and looking at the individual results is recommended instead.                               
+
+
+>>> Running loop_unroll kernel (times=4)...
+----------------------------------------
+Testing with 2^20 = 1048576 elements
+----------------------------------------
+----------------------------------------
+Testing with block_dim = 256 threads per block
+Testing with loop_unroll_times = 4
+Kernel: loop_unroll
+----------------------------------------
+Kernel execution time: 0.062336 ms
+Copy successful
+
+Collecting DRAM metrics with ncu...
+
+--- ncu Raw Measurement Results ---
+==PROF== Connected to process 8566 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Profiling "copy_loop_unroll": 0%....50%....100% - 1 pass
+Kernel execution time: 553.161 ms
+Copy successful
+==PROF== Disconnected from process 8566
+[8566] copy@127.0.0.1
+  copy_loop_unroll(float *, float *, int) (1024, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
+    Section: Command line profiler metrics
+    ---------------------- ----------- ------- ------- -------
+    Metric Name            Metric Unit Minimum Maximum Average
+    ---------------------- ----------- ------- ------- -------
+    dram__bytes_read.sum         Mbyte    4.20    4.20    4.20
+    dram__bytes_write.sum         byte  128.00  128.00  128.00
+    gpu__time_duration.sum          us   10.40   10.40   10.40
+    ---------------------- ----------- ------- ------- -------
+
+  Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
+  metrics for each individual kernel launch.                                                                         
+  If aggregating across varying launch configurations (like shared memory, cache config settings), the arithmetic    
+  mean can be misleading and looking at the individual results is recommended instead.                               
+
+
+>>> Running vectorize kernel...
+----------------------------------------
+Testing with 2^20 = 1048576 elements
+----------------------------------------
+----------------------------------------
+Testing with block_dim = 256 threads per block
+Kernel: vectorize
+----------------------------------------
+Kernel execution time: 0.05552 ms
+Copy successful
+
+Collecting DRAM metrics with ncu...
+
+--- ncu Raw Measurement Results ---
+==PROF== Connected to process 8591 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Profiling "copy_vectorize": 0%....50%....100% - 1 pass
+Kernel execution time: 574.079 ms
+Copy successful
+==PROF== Disconnected from process 8591
+[8591] copy@127.0.0.1
+  copy_vectorize(float *, float *, int) (1024, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
+    Section: Command line profiler metrics
+    ---------------------- ----------- ------- ------- -------
+    Metric Name            Metric Unit Minimum Maximum Average
+    ---------------------- ----------- ------- ------- -------
+    dram__bytes_read.sum         Mbyte    4.20    4.20    4.20
+    dram__bytes_write.sum         byte  128.00  128.00  128.00
+    gpu__time_duration.sum          us    8.19    8.19    8.19
+    ---------------------- ----------- ------- ------- -------
+
+  Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
+  metrics for each individual kernel launch.                                                                         
+  If aggregating across varying launch configurations (like shared memory, cache config settings), the arithmetic    
+  mean can be misleading and looking at the individual results is recommended instead.                               
+
+
+>>> Running vectorize_unroll kernel...
+----------------------------------------
+Testing with 2^20 = 1048576 elements
+----------------------------------------
+----------------------------------------
+Testing with block_dim = 256 threads per block
+Kernel: vectorize_unroll
+----------------------------------------
+Kernel execution time: 0.066304 ms
+Copy successful
+
+Collecting DRAM metrics with ncu...
+
+--- ncu Raw Measurement Results ---
+==PROF== Connected to process 8616 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Profiling "copy_vectorize_unroll": 0%....50%....100% - 1 pass
+Kernel execution time: 594.858 ms
+Copy successful
+==PROF== Disconnected from process 8616
+[8616] copy@127.0.0.1
+  copy_vectorize_unroll(float *, float *, int) (128, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
+    Section: Command line profiler metrics
+    ---------------------- ----------- ------- ------- -------
+    Metric Name            Metric Unit Minimum Maximum Average
+    ---------------------- ----------- ------- ------- -------
+    dram__bytes_read.sum         Mbyte    4.20    4.20    4.20
+    dram__bytes_write.sum         byte  128.00  128.00  128.00
+    gpu__time_duration.sum          us   10.75   10.75   10.75
+    ---------------------- ----------- ------- ------- -------
+
+  Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
+  metrics for each individual kernel launch.                                                                         
+  If aggregating across varying launch configurations (like shared memory, cache config settings), the arithmetic    
+  mean can be misleading and looking at the individual results is recommended instead.                               
+
+
+========================================
+
+========================================
+Testing with 2^22 = 4194304 elements
+========================================
+
+>>> Running baseline kernel...
+----------------------------------------
+Testing with 2^22 = 4194304 elements
+----------------------------------------
+----------------------------------------
+Testing with block_dim = 256 threads per block
+Kernel: baseline
+----------------------------------------
+Kernel execution time: 0.07104 ms
+Copy successful
+
+Collecting DRAM metrics with ncu...
+
+--- ncu Raw Measurement Results ---
+==PROF== Connected to process 8641 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Profiling "copy_baseline": 0%....50%....100% - 1 pass
+Kernel execution time: 598.716 ms
+Copy successful
+==PROF== Disconnected from process 8641
+[8641] copy@127.0.0.1
+  copy_baseline(float *, float *, int) (16384, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
+    Section: Command line profiler metrics
+    ---------------------- ----------- ------- ------- -------
+    Metric Name            Metric Unit Minimum Maximum Average
+    ---------------------- ----------- ------- ------- -------
+    dram__bytes_read.sum         Mbyte   16.78   16.78   16.78
+    dram__bytes_write.sum        Mbyte    4.33    4.33    4.33
+    gpu__time_duration.sum          us   25.44   25.44   25.44
+    ---------------------- ----------- ------- ------- -------
+
+  Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
+  metrics for each individual kernel launch.                                                                         
+  If aggregating across varying launch configurations (like shared memory, cache config settings), the arithmetic    
+  mean can be misleading and looking at the individual results is recommended instead.                               
+
+
+>>> Running loop_unroll kernel (times=4)...
+----------------------------------------
+Testing with 2^22 = 4194304 elements
+----------------------------------------
+----------------------------------------
+Testing with block_dim = 256 threads per block
+Testing with loop_unroll_times = 4
+Kernel: loop_unroll
+----------------------------------------
+Kernel execution time: 0.07408 ms
+Copy successful
+
+Collecting DRAM metrics with ncu...
+
+--- ncu Raw Measurement Results ---
+==PROF== Connected to process 8666 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Profiling "copy_loop_unroll": 0%....50%....100% - 1 pass
+Kernel execution time: 597.905 ms
+Copy successful
+==PROF== Disconnected from process 8666
+[8666] copy@127.0.0.1
+  copy_loop_unroll(float *, float *, int) (4096, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
+    Section: Command line profiler metrics
+    ---------------------- ----------- ------- ------- -------
+    Metric Name            Metric Unit Minimum Maximum Average
+    ---------------------- ----------- ------- ------- -------
+    dram__bytes_read.sum         Mbyte   16.78   16.78   16.78
+    dram__bytes_write.sum        Mbyte    4.32    4.32    4.32
+    gpu__time_duration.sum          us   24.26   24.26   24.26
+    ---------------------- ----------- ------- ------- -------
+
+  Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
+  metrics for each individual kernel launch.                                                                         
+  If aggregating across varying launch configurations (like shared memory, cache config settings), the arithmetic    
+  mean can be misleading and looking at the individual results is recommended instead.                               
+
+
+>>> Running vectorize kernel...
+----------------------------------------
+Testing with 2^22 = 4194304 elements
+----------------------------------------
+----------------------------------------
+Testing with block_dim = 256 threads per block
+Kernel: vectorize
+----------------------------------------
+Kernel execution time: 0.074656 ms
+Copy successful
+
+Collecting DRAM metrics with ncu...
+
+--- ncu Raw Measurement Results ---
+==PROF== Connected to process 8691 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Profiling "copy_vectorize": 0%....50%....100% - 1 pass
+Kernel execution time: 595.503 ms
+Copy successful
+==PROF== Disconnected from process 8691
+[8691] copy@127.0.0.1
   copy_vectorize(float *, float *, int) (4096, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
     Section: Command line profiler metrics
     ---------------------- ----------- ------- ------- -------
     Metric Name            Metric Unit Minimum Maximum Average
     ---------------------- ----------- ------- ------- -------
     dram__bytes_read.sum         Mbyte   16.78   16.78   16.78
-    dram__bytes_write.sum        Mbyte    3.51    3.51    3.51
-    gpu__time_duration.sum          us   18.56   18.56   18.56
+    dram__bytes_write.sum        Mbyte    3.46    3.46    3.46
+    gpu__time_duration.sum          us   18.78   18.78   18.78
+    ---------------------- ----------- ------- ------- -------
+
+  Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
+  metrics for each individual kernel launch.                                                                         
+  If aggregating across varying launch configurations (like shared memory, cache config settings), the arithmetic    
+  mean can be misleading and looking at the individual results is recommended instead.                               
+
+
+>>> Running vectorize_unroll kernel...
+----------------------------------------
+Testing with 2^22 = 4194304 elements
+----------------------------------------
+----------------------------------------
+Testing with block_dim = 256 threads per block
+Kernel: vectorize_unroll
+----------------------------------------
+Kernel execution time: 0.072512 ms
+Copy successful
+
+Collecting DRAM metrics with ncu...
+
+--- ncu Raw Measurement Results ---
+==PROF== Connected to process 8716 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Profiling "copy_vectorize_unroll": 0%....50%....100% - 1 pass
+Kernel execution time: 578.824 ms
+Copy successful
+==PROF== Disconnected from process 8716
+[8716] copy@127.0.0.1
+  copy_vectorize_unroll(float *, float *, int) (512, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
+    Section: Command line profiler metrics
+    ---------------------- ----------- ------- ------- -------
+    Metric Name            Metric Unit Minimum Maximum Average
+    ---------------------- ----------- ------- ------- -------
+    dram__bytes_read.sum         Mbyte   16.78   16.78   16.78
+    dram__bytes_write.sum        Mbyte    3.80    3.80    3.80
+    gpu__time_duration.sum          us   19.74   19.74   19.74
     ---------------------- ----------- ------- ------- -------
 
   Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
@@ -824,26 +1076,26 @@ Testing with 2^24 = 16777216 elements
 Testing with block_dim = 256 threads per block
 Kernel: baseline
 ----------------------------------------
-Kernel execution time: 0.141088 ms
+Kernel execution time: 0.138624 ms
 Copy successful
 
 Collecting DRAM metrics with ncu...
 
 --- ncu Raw Measurement Results ---
-==PROF== Connected to process 6838 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Connected to process 8741 (/workspace/cuda-learning/cuda-copy/copy)
 ==PROF== Profiling "copy_baseline": 0%....50%....100% - 1 pass
-Kernel execution time: 614.689 ms
+Kernel execution time: 576.273 ms
 Copy successful
-==PROF== Disconnected from process 6838
-[6838] copy@127.0.0.1
+==PROF== Disconnected from process 8741
+[8741] copy@127.0.0.1
   copy_baseline(float *, float *, int) (65536, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
     Section: Command line profiler metrics
     ---------------------- ----------- ------- ------- -------
     Metric Name            Metric Unit Minimum Maximum Average
     ---------------------- ----------- ------- ------- -------
-    dram__bytes_read.sum         Mbyte   67.12   67.12   67.12
-    dram__bytes_write.sum        Mbyte   54.80   54.80   54.80
-    gpu__time_duration.sum          us   95.36   95.36   95.36
+    dram__bytes_read.sum         Mbyte   67.11   67.11   67.11
+    dram__bytes_write.sum        Mbyte   54.79   54.79   54.79
+    gpu__time_duration.sum          us   95.07   95.07   95.07
     ---------------------- ----------- ------- ------- -------
 
   Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
@@ -861,26 +1113,26 @@ Testing with block_dim = 256 threads per block
 Testing with loop_unroll_times = 4
 Kernel: loop_unroll
 ----------------------------------------
-Kernel execution time: 0.148896 ms
+Kernel execution time: 0.135488 ms
 Copy successful
 
 Collecting DRAM metrics with ncu...
 
 --- ncu Raw Measurement Results ---
-==PROF== Connected to process 6863 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Connected to process 8766 (/workspace/cuda-learning/cuda-copy/copy)
 ==PROF== Profiling "copy_loop_unroll": 0%....50%....100% - 1 pass
-Kernel execution time: 607.783 ms
+Kernel execution time: 567.328 ms
 Copy successful
-==PROF== Disconnected from process 6863
-[6863] copy@127.0.0.1
+==PROF== Disconnected from process 8766
+[8766] copy@127.0.0.1
   copy_loop_unroll(float *, float *, int) (16384, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
     Section: Command line profiler metrics
     ---------------------- ----------- ------- ------- -------
     Metric Name            Metric Unit Minimum Maximum Average
     ---------------------- ----------- ------- ------- -------
-    dram__bytes_read.sum         Mbyte   67.12   67.12   67.12
+    dram__bytes_read.sum         Mbyte   67.11   67.11   67.11
     dram__bytes_write.sum        Mbyte   53.49   53.49   53.49
-    gpu__time_duration.sum          us   89.89   89.89   89.89
+    gpu__time_duration.sum          us   90.08   90.08   90.08
     ---------------------- ----------- ------- ------- -------
 
   Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
@@ -897,18 +1149,18 @@ Testing with 2^24 = 16777216 elements
 Testing with block_dim = 256 threads per block
 Kernel: vectorize
 ----------------------------------------
-Kernel execution time: 0.127744 ms
+Kernel execution time: 0.128928 ms
 Copy successful
 
 Collecting DRAM metrics with ncu...
 
 --- ncu Raw Measurement Results ---
-==PROF== Connected to process 6888 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Connected to process 8791 (/workspace/cuda-learning/cuda-copy/copy)
 ==PROF== Profiling "copy_vectorize": 0%....50%....100% - 1 pass
-Kernel execution time: 623.315 ms
+Kernel execution time: 594.994 ms
 Copy successful
-==PROF== Disconnected from process 6888
-[6888] copy@127.0.0.1
+==PROF== Disconnected from process 8791
+[8791] copy@127.0.0.1
   copy_vectorize(float *, float *, int) (16384, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
     Section: Command line profiler metrics
     ---------------------- ----------- ------- ------- -------
@@ -916,7 +1168,43 @@ Copy successful
     ---------------------- ----------- ------- ------- -------
     dram__bytes_read.sum         Mbyte   67.11   67.11   67.11
     dram__bytes_write.sum        Mbyte   50.55   50.55   50.55
-    gpu__time_duration.sum          us   73.18   73.18   73.18
+    gpu__time_duration.sum          us   73.50   73.50   73.50
+    ---------------------- ----------- ------- ------- -------
+
+  Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
+  metrics for each individual kernel launch.                                                                         
+  If aggregating across varying launch configurations (like shared memory, cache config settings), the arithmetic    
+  mean can be misleading and looking at the individual results is recommended instead.                               
+
+
+>>> Running vectorize_unroll kernel...
+----------------------------------------
+Testing with 2^24 = 16777216 elements
+----------------------------------------
+----------------------------------------
+Testing with block_dim = 256 threads per block
+Kernel: vectorize_unroll
+----------------------------------------
+Kernel execution time: 0.14304 ms
+Copy successful
+
+Collecting DRAM metrics with ncu...
+
+--- ncu Raw Measurement Results ---
+==PROF== Connected to process 8816 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Profiling "copy_vectorize_unroll": 0%....50%....100% - 1 pass
+Kernel execution time: 572.328 ms
+Copy successful
+==PROF== Disconnected from process 8816
+[8816] copy@127.0.0.1
+  copy_vectorize_unroll(float *, float *, int) (2048, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
+    Section: Command line profiler metrics
+    ---------------------- ----------- ------- ------- -------
+    Metric Name            Metric Unit Minimum Maximum Average
+    ---------------------- ----------- ------- ------- -------
+    dram__bytes_read.sum         Mbyte   67.11   67.11   67.11
+    dram__bytes_write.sum        Mbyte   51.66   51.66   51.66
+    gpu__time_duration.sum          us   76.58   76.58   76.58
     ---------------------- ----------- ------- ------- -------
 
   Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
@@ -939,26 +1227,26 @@ Testing with 2^26 = 67108864 elements
 Testing with block_dim = 256 threads per block
 Kernel: baseline
 ----------------------------------------
-Kernel execution time: 0.384224 ms
+Kernel execution time: 0.3864 ms
 Copy successful
 
 Collecting DRAM metrics with ncu...
 
 --- ncu Raw Measurement Results ---
-==PROF== Connected to process 6913 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Connected to process 8841 (/workspace/cuda-learning/cuda-copy/copy)
 ==PROF== Profiling "copy_baseline": 0%....50%....100% - 1 pass
-Kernel execution time: 602.117 ms
+Kernel execution time: 612.487 ms
 Copy successful
-==PROF== Disconnected from process 6913
-[6913] copy@127.0.0.1
+==PROF== Disconnected from process 8841
+[8841] copy@127.0.0.1
   copy_baseline(float *, float *, int) (262144, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
     Section: Command line profiler metrics
     ---------------------- ----------- ------- ------- -------
     Metric Name            Metric Unit Minimum Maximum Average
     ---------------------- ----------- ------- ------- -------
     dram__bytes_read.sum         Mbyte  268.44  268.44  268.44
-    dram__bytes_write.sum        Mbyte  255.56  255.56  255.56
-    gpu__time_duration.sum          us  376.42  376.42  376.42
+    dram__bytes_write.sum        Mbyte  255.57  255.57  255.57
+    gpu__time_duration.sum          us  377.06  377.06  377.06
     ---------------------- ----------- ------- ------- -------
 
   Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
@@ -976,26 +1264,26 @@ Testing with block_dim = 256 threads per block
 Testing with loop_unroll_times = 4
 Kernel: loop_unroll
 ----------------------------------------
-Kernel execution time: 0.384512 ms
+Kernel execution time: 0.38432 ms
 Copy successful
 
 Collecting DRAM metrics with ncu...
 
 --- ncu Raw Measurement Results ---
-==PROF== Connected to process 6938 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Connected to process 8866 (/workspace/cuda-learning/cuda-copy/copy)
 ==PROF== Profiling "copy_loop_unroll": 0%....50%....100% - 1 pass
-Kernel execution time: 555.821 ms
+Kernel execution time: 608.5 ms
 Copy successful
-==PROF== Disconnected from process 6938
-[6938] copy@127.0.0.1
+==PROF== Disconnected from process 8866
+[8866] copy@127.0.0.1
   copy_loop_unroll(float *, float *, int) (65536, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
     Section: Command line profiler metrics
     ---------------------- ----------- ------- ------- -------
     Metric Name            Metric Unit Minimum Maximum Average
     ---------------------- ----------- ------- ------- -------
-    dram__bytes_read.sum         Mbyte  268.44  268.44  268.44
-    dram__bytes_write.sum        Mbyte  255.67  255.67  255.67
-    gpu__time_duration.sum          us  353.41  353.41  353.41
+    dram__bytes_read.sum         Mbyte  268.45  268.45  268.45
+    dram__bytes_write.sum        Mbyte  255.58  255.58  255.58
+    gpu__time_duration.sum          us  354.59  354.59  354.59
     ---------------------- ----------- ------- ------- -------
 
   Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
@@ -1012,26 +1300,62 @@ Testing with 2^26 = 67108864 elements
 Testing with block_dim = 256 threads per block
 Kernel: vectorize
 ----------------------------------------
-Kernel execution time: 0.357056 ms
+Kernel execution time: 0.363168 ms
 Copy successful
 
 Collecting DRAM metrics with ncu...
 
 --- ncu Raw Measurement Results ---
-==PROF== Connected to process 6963 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Connected to process 8891 (/workspace/cuda-learning/cuda-copy/copy)
 ==PROF== Profiling "copy_vectorize": 0%....50%....100% - 1 pass
-Kernel execution time: 588.864 ms
+Kernel execution time: 590.118 ms
 Copy successful
-==PROF== Disconnected from process 6963
-[6963] copy@127.0.0.1
+==PROF== Disconnected from process 8891
+[8891] copy@127.0.0.1
   copy_vectorize(float *, float *, int) (65536, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
     Section: Command line profiler metrics
     ---------------------- ----------- ------- ------- -------
     Metric Name            Metric Unit Minimum Maximum Average
     ---------------------- ----------- ------- ------- -------
-    dram__bytes_read.sum         Mbyte  268.48  268.48  268.48
-    dram__bytes_write.sum        Mbyte  252.72  252.72  252.72
-    gpu__time_duration.sum          us  306.91  306.91  306.91
+    dram__bytes_read.sum         Mbyte  268.44  268.44  268.44
+    dram__bytes_write.sum        Mbyte  252.37  252.37  252.37
+    gpu__time_duration.sum          us  305.18  305.18  305.18
+    ---------------------- ----------- ------- ------- -------
+
+  Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
+  metrics for each individual kernel launch.                                                                         
+  If aggregating across varying launch configurations (like shared memory, cache config settings), the arithmetic    
+  mean can be misleading and looking at the individual results is recommended instead.                               
+
+
+>>> Running vectorize_unroll kernel...
+----------------------------------------
+Testing with 2^26 = 67108864 elements
+----------------------------------------
+----------------------------------------
+Testing with block_dim = 256 threads per block
+Kernel: vectorize_unroll
+----------------------------------------
+Kernel execution time: 0.40016 ms
+Copy successful
+
+Collecting DRAM metrics with ncu...
+
+--- ncu Raw Measurement Results ---
+==PROF== Connected to process 8916 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Profiling "copy_vectorize_unroll": 0%....50%....100% - 1 pass
+Kernel execution time: 571.671 ms
+Copy successful
+==PROF== Disconnected from process 8916
+[8916] copy@127.0.0.1
+  copy_vectorize_unroll(float *, float *, int) (8192, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
+    Section: Command line profiler metrics
+    ---------------------- ----------- ------- ------- -------
+    Metric Name            Metric Unit Minimum Maximum Average
+    ---------------------- ----------- ------- ------- -------
+    dram__bytes_read.sum         Mbyte  268.44  268.44  268.44
+    dram__bytes_write.sum        Mbyte  253.97  253.97  253.97
+    gpu__time_duration.sum          us  320.29  320.29  320.29
     ---------------------- ----------- ------- ------- -------
 
   Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
@@ -1054,18 +1378,18 @@ Testing with 2^28 = 268435456 elements
 Testing with block_dim = 256 threads per block
 Kernel: baseline
 ----------------------------------------
-Kernel execution time: 1.48365 ms
+Kernel execution time: 1.43584 ms
 Copy successful
 
 Collecting DRAM metrics with ncu...
 
 --- ncu Raw Measurement Results ---
-==PROF== Connected to process 6988 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Connected to process 8941 (/workspace/cuda-learning/cuda-copy/copy)
 ==PROF== Profiling "copy_baseline": 0%....50%....100% - 1 pass
-Kernel execution time: 600 ms
+Kernel execution time: 600.56 ms
 Copy successful
-==PROF== Disconnected from process 6988
-[6988] copy@127.0.0.1
+==PROF== Disconnected from process 8941
+[8941] copy@127.0.0.1
   copy_baseline(float *, float *, int) (1048576, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
     Section: Command line profiler metrics
     ---------------------- ----------- ------- ------- -------
@@ -1091,18 +1415,18 @@ Testing with block_dim = 256 threads per block
 Testing with loop_unroll_times = 4
 Kernel: loop_unroll
 ----------------------------------------
-Kernel execution time: 1.42758 ms
+Kernel execution time: 1.43274 ms
 Copy successful
 
 Collecting DRAM metrics with ncu...
 
 --- ncu Raw Measurement Results ---
-==PROF== Connected to process 7013 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Connected to process 8966 (/workspace/cuda-learning/cuda-copy/copy)
 ==PROF== Profiling "copy_loop_unroll": 0%....50%....100% - 1 pass
-Kernel execution time: 602.539 ms
+Kernel execution time: 630.493 ms
 Copy successful
-==PROF== Disconnected from process 7013
-[7013] copy@127.0.0.1
+==PROF== Disconnected from process 8966
+[8966] copy@127.0.0.1
   copy_loop_unroll(float *, float *, int) (262144, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
     Section: Command line profiler metrics
     ---------------------- ----------- ------- ------- -------
@@ -1127,18 +1451,18 @@ Testing with 2^28 = 268435456 elements
 Testing with block_dim = 256 threads per block
 Kernel: vectorize
 ----------------------------------------
-Kernel execution time: 1.32429 ms
+Kernel execution time: 1.32134 ms
 Copy successful
 
 Collecting DRAM metrics with ncu...
 
 --- ncu Raw Measurement Results ---
-==PROF== Connected to process 7038 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Connected to process 8991 (/workspace/cuda-learning/cuda-copy/copy)
 ==PROF== Profiling "copy_vectorize": 0%....50%....100% - 1 pass
-Kernel execution time: 656.587 ms
+Kernel execution time: 571.284 ms
 Copy successful
-==PROF== Disconnected from process 7038
-[7038] copy@127.0.0.1
+==PROF== Disconnected from process 8991
+[8991] copy@127.0.0.1
   copy_vectorize(float *, float *, int) (262144, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
     Section: Command line profiler metrics
     ---------------------- ----------- ------- ------- -------
@@ -1147,6 +1471,42 @@ Copy successful
     dram__bytes_read.sum         Gbyte    1.07    1.07    1.07
     dram__bytes_write.sum        Gbyte    1.06    1.06    1.06
     gpu__time_duration.sum          ms    1.25    1.25    1.25
+    ---------------------- ----------- ------- ------- -------
+
+  Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
+  metrics for each individual kernel launch.                                                                         
+  If aggregating across varying launch configurations (like shared memory, cache config settings), the arithmetic    
+  mean can be misleading and looking at the individual results is recommended instead.                               
+
+
+>>> Running vectorize_unroll kernel...
+----------------------------------------
+Testing with 2^28 = 268435456 elements
+----------------------------------------
+----------------------------------------
+Testing with block_dim = 256 threads per block
+Kernel: vectorize_unroll
+----------------------------------------
+Kernel execution time: 1.35034 ms
+Copy successful
+
+Collecting DRAM metrics with ncu...
+
+--- ncu Raw Measurement Results ---
+==PROF== Connected to process 9016 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Profiling "copy_vectorize_unroll": 0%....50%....100% - 1 pass
+Kernel execution time: 603.158 ms
+Copy successful
+==PROF== Disconnected from process 9016
+[9016] copy@127.0.0.1
+  copy_vectorize_unroll(float *, float *, int) (32768, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
+    Section: Command line profiler metrics
+    ---------------------- ----------- ------- ------- -------
+    Metric Name            Metric Unit Minimum Maximum Average
+    ---------------------- ----------- ------- ------- -------
+    dram__bytes_read.sum         Gbyte    1.07    1.07    1.07
+    dram__bytes_write.sum        Gbyte    1.06    1.06    1.06
+    gpu__time_duration.sum          ms    1.28    1.28    1.28
     ---------------------- ----------- ------- ------- -------
 
   Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
@@ -1169,18 +1529,18 @@ Testing with 2^30 = 1073741824 elements
 Testing with block_dim = 256 threads per block
 Kernel: baseline
 ----------------------------------------
-Kernel execution time: 5.67517 ms
+Kernel execution time: 5.71264 ms
 Copy successful
 
 Collecting DRAM metrics with ncu...
 
 --- ncu Raw Measurement Results ---
-==PROF== Connected to process 7063 (/workspace/cuda-learning/cuda-copy/copy)
+==PROF== Connected to process 9041 (/workspace/cuda-learning/cuda-copy/copy)
 ==PROF== Profiling "copy_baseline": 0%....50%....100% - 1 pass
-Kernel execution time: 634.451 ms
+Kernel execution time: 632.072 ms
 Copy successful
-==PROF== Disconnected from process 7063
-[7063] copy@127.0.0.1
+==PROF== Disconnected from process 9041
+[9041] copy@127.0.0.1
   copy_baseline(float *, float *, int) (4194304, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
     Section: Command line profiler metrics
     ---------------------- ----------- ------- ------- -------
@@ -1188,7 +1548,7 @@ Copy successful
     ---------------------- ----------- ------- ------- -------
     dram__bytes_read.sum         Gbyte    4.30    4.30    4.30
     dram__bytes_write.sum        Gbyte    4.28    4.28    4.28
-    gpu__time_duration.sum          ms    6.08    6.08    6.08
+    gpu__time_duration.sum          ms    6.07    6.07    6.07
     ---------------------- ----------- ------- ------- -------
 
   Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
@@ -1206,72 +1566,4 @@ Testing with block_dim = 256 threads per block
 Testing with loop_unroll_times = 4
 Kernel: loop_unroll
 ----------------------------------------
-Kernel execution time: 5.7089 ms
-Copy successful
-
-Collecting DRAM metrics with ncu...
-
---- ncu Raw Measurement Results ---
-==PROF== Connected to process 7088 (/workspace/cuda-learning/cuda-copy/copy)
-==PROF== Profiling "copy_loop_unroll": 0%....50%....100% - 1 pass
-Kernel execution time: 643.618 ms
-Copy successful
-==PROF== Disconnected from process 7088
-[7088] copy@127.0.0.1
-  copy_loop_unroll(float *, float *, int) (1048576, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
-    Section: Command line profiler metrics
-    ---------------------- ----------- ------- ------- -------
-    Metric Name            Metric Unit Minimum Maximum Average
-    ---------------------- ----------- ------- ------- -------
-    dram__bytes_read.sum         Gbyte    4.30    4.30    4.30
-    dram__bytes_write.sum        Gbyte    4.28    4.28    4.28
-    gpu__time_duration.sum          ms    5.84    5.84    5.84
-    ---------------------- ----------- ------- ------- -------
-
-  Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
-  metrics for each individual kernel launch.                                                                         
-  If aggregating across varying launch configurations (like shared memory, cache config settings), the arithmetic    
-  mean can be misleading and looking at the individual results is recommended instead.                               
-
-
->>> Running vectorize kernel...
-----------------------------------------
-Testing with 2^30 = 1073741824 elements
-----------------------------------------
-----------------------------------------
-Testing with block_dim = 256 threads per block
-Kernel: vectorize
-----------------------------------------
-Kernel execution time: 5.21376 ms
-Copy successful
-
-Collecting DRAM metrics with ncu...
-
---- ncu Raw Measurement Results ---
-==PROF== Connected to process 7113 (/workspace/cuda-learning/cuda-copy/copy)
-==PROF== Profiling "copy_vectorize": 0%....50%....100% - 1 pass
-Kernel execution time: 647.163 ms
-Copy successful
-==PROF== Disconnected from process 7113
-[7113] copy@127.0.0.1
-  copy_vectorize(float *, float *, int) (1048576, 1, 1)x(256, 1, 1), Device 0, CC 8.0, Invocations 1
-    Section: Command line profiler metrics
-    ---------------------- ----------- ------- ------- -------
-    Metric Name            Metric Unit Minimum Maximum Average
-    ---------------------- ----------- ------- ------- -------
-    dram__bytes_read.sum         Gbyte    4.30    4.30    4.30
-    dram__bytes_write.sum        Gbyte    4.28    4.28    4.28
-    gpu__time_duration.sum          ms    5.04    5.04    5.04
-    ---------------------- ----------- ------- ------- -------
-
-  Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
-  metrics for each individual kernel launch.                                                                         
-  If aggregating across varying launch configurations (like shared memory, cache config settings), the arithmetic    
-  mean can be misleading and looking at the individual results is recommended instead.                               
-
-
-========================================
-
-==========================================
-Testing completed
-==========================================
+Kernel execution time: 5.63478 ms

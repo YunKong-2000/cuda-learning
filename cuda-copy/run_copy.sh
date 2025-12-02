@@ -65,7 +65,7 @@ echo "Running copy kernel with different sizes"
 echo "=========================================="
 echo ""
 
-# Kernel selection: "baseline", "loop_unroll", "vectorize", or "compare" (runs all three)
+# Kernel selection: "baseline", "loop_unroll", "vectorize", "vectorize_unroll", or "compare" (runs all kernels)
 KERNEL_NAME="${KERNEL_NAME:-baseline}"
 
 # Function to run a single kernel test
@@ -98,6 +98,9 @@ run_kernel_test() {
     elif [ "$kernel_name" = "vectorize" ]; then
         NCU_KERNEL_NAME="copy_vectorize"
         CMD_ARGS="$num_elements $block_dim vectorize"
+    elif [ "$kernel_name" = "vectorize_unroll" ]; then
+        NCU_KERNEL_NAME="copy_vectorize_unroll"
+        CMD_ARGS="$num_elements $block_dim vectorize_unroll"
     elif [ "$kernel_name" = "loop_unroll" ]; then
         NCU_KERNEL_NAME="copy_loop_unroll"
         CMD_ARGS="$num_elements $block_dim loop_unroll $loop_unroll_times"
@@ -189,7 +192,7 @@ run_kernel_test() {
 
 # Check if comparing all kernels
 if [ "$KERNEL_NAME" = "compare" ] || [ "$KERNEL_NAME" = "all" ]; then
-    echo "Comparing all three kernels: baseline, loop_unroll (times=4), vectorize"
+    echo "Comparing all kernels: baseline, loop_unroll (times=4), vectorize, vectorize_unroll"
     echo "Fixed parameters: block_dim=256, loop_unroll_times=4"
     echo ""
     
@@ -217,21 +220,19 @@ if [ "$KERNEL_NAME" = "compare" ] || [ "$KERNEL_NAME" = "all" ]; then
         echo ">>> Running vectorize kernel..."
         run_kernel_test "vectorize" $block_dim $num_elements $n
         
+        # Run vectorize_unroll
+        echo ">>> Running vectorize_unroll kernel..."
+        run_kernel_test "vectorize_unroll" $block_dim $num_elements $n
+        
         echo "========================================"
         echo ""
     done
     
-elif [ "$KERNEL_NAME" = "baseline" ] || [ "$KERNEL_NAME" = "vectorize" ]; then
+elif [ "$KERNEL_NAME" = "baseline" ] || [ "$KERNEL_NAME" = "vectorize" ] || [ "$KERNEL_NAME" = "vectorize_unroll" ]; then
     echo "Using kernel: $KERNEL_NAME"
     echo ""
-    # Baseline and Vectorize: test different block_dim and data sizes
-    if [ "$KERNEL_NAME" = "baseline" ]; then
-        NCU_KERNEL_NAME="copy_baseline"
-        KERNEL_ARG="baseline"
-    else
-        NCU_KERNEL_NAME="copy_vectorize"
-        KERNEL_ARG="vectorize"
-    fi
+    # Baseline, Vectorize, and Vectorize_unroll: test different block_dim and data sizes
+    # All use the same parameter format (n, threadnum, kernel_name)
     
     block_dim_list=(256)
     # block_dim_list=(128 256 512 1024)
@@ -260,7 +261,7 @@ elif [ "$KERNEL_NAME" = "loop_unroll" ]; then
     done
     
 else
-    echo "Error: Invalid KERNEL_NAME. Must be 'baseline', 'loop_unroll', 'vectorize', or 'compare'"
+    echo "Error: Invalid KERNEL_NAME. Must be 'baseline', 'loop_unroll', 'vectorize', 'vectorize_unroll', or 'compare'"
     exit 1
 fi
 
